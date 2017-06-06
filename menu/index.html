@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>nw menu</title>
+	<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+</head>
+<body>
+	<div id="ToolBar">
+		<div style="float: right;">
+			<button onclick="javascript:history.back()">返回</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnExit">退出</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnMax">最大化</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnReback">还原</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnReload">刷新</button>
+		</div>
+	</div>	
+	
+	<p> 'Right click' to show context menu <script>document.write(process.version); </script></p>
+	<script>
+		var menu = new nw.Menu();
+		menu.append(new nw.MenuItem({
+			label:'return',
+			click:function(){
+				//alert('You have clicked at "Item return"');
+				history.back();
+			}
+		}));
+		
+		menu.append(new nw.MenuItem({label:'B'}));
+		menu.append(new nw.MenuItem({type:'separator'}));
+		menu.append(new nw.MenuItem({label:'C'}));
+		
+		document.body.addEventListener('contextmenu', function(ev){
+			ev.preventDefault();
+			menu.popup(ev.x, ev.y);
+			return false;
+		}, false);
+		
+	</script>
+	
+	<script type="text/javascript" src="js/common.js" ></script>
+</body>
+</html>

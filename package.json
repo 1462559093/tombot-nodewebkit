@@ -1,0 +1,7 @@
+{
+  "name": "nw menu",
+  "main": "main.js",
+  "window":{
+    "fullscreen": true
+  }
+}

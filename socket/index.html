@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>用户登录socket连接后台验证</title>
+	<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+	
+	<style>
+		#loginPanel{
+			position:relative;
+		}
+	</style>
+</head>
+<body>
+	<div id="ToolBar">
+		<div style="float: right;">
+			<button onclick="javascript:history.back()">返回</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnExit">退出</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnMax">最大化</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnReback">还原</button>
+		</div>
+		<div style="float: right;">
+			<button id="btnReload">刷新</button>
+		</div>
+	</div>
+	
+	<div id="loginPanel">
+		<div id="sub">
+			<div>
+				<span>用户名</span><input type="text" name="username"  />
+			</div>
+			
+			<div>
+				<span>密码</span><input type="password" name="passwd"  />
+			</div>
+			
+			<div>
+				<input type="button" name="loginBtn" onclick="login()" value="登录" />
+			</div>
+			<br />
+			<div>
+				<span id="RetMsg"></span>
+			</div>
+		
+			<div id="osinfo"></div>
+		</div>
+	</div>
+	
+	<script>
+		var net = require('net');
+		
+		function login2(){
+			//alert(xxx.cmd);
+			alert('try to login');
+			
+			var username = document.getElementsByName("username");
+			var passwd = document.getElementsByName("passwd");
+			var RetMsg = document.getElementById("RetMsg");
+			
+			console.log('username :' + username[0].value);
+			console.log("password:" + passwd[0].value);
+			RetMsg.innerHTML = "登录成功";
+		}
+		
+	    function login(){
+			var username = (document.getElementsByName("username"))[0].value;
+			var passwd = (document.getElementsByName("passwd"))[0].value;
+			var RetMsg = document.getElementById("RetMsg");
+			
+			console.log('username :' + username.value);
+			console.log("password:" + passwd.value);
+			var client = new net.Socket();
+			
+			console.log("try to connect to 192.168.134.129 9000");
+			client.connect({"host":'192.168.134.129', "port":9000}, function(){
+				console.log("connect successfunlly");
+				var loginCmd = {"cmd":"login", "username":username, "password":passwd};
+				client.write( JSON.stringify(loginCmd));
+			});
+			
+			client.on('data', function(data){
+				console.log("recv data from server:" + data.toString());
+				var result = JSON.parse(data.toString());
+				console.log("data process finished!" + result.RetMsg);
+				RetMsg.innerHTML = result.RetMsg;
+				client.end();
+				console.log("data process finished!");
+			});
+		}
+	    
+	</script>
+	<script type="text/javascript" src="js/common.js" ></script>
+</body>
+</html>
